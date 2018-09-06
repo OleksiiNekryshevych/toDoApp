@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>toDoList</title>
+	<meta name="author" content="Nekryshevych Oleksii">
+	<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+	<div class="wrapper">
+		<div class="toDoList">
+			<h1 class="title">todo:</h1>
+			<section id="tasks" class="tasks">
+ 			
+ 			<!-- список задач *создаем через форму создания новой задачи  -->
+						
+			</section>
+			<section class="navigation">
+				<button id="newTaskBtn" class="btn navigation__newTask" onclick="showForm()">Новая задача</button>
+				<div class="filterPriority">
+					<input id="filterPriority__check" type="checkbox" name="tasksSort">
+					<label for="filterPriority__check">по приоритету</label>
+				</div>
+				<select class="filterProjects">
+					<option class="selector" selected>All</option>
+				</select>
+			</section>
+
+			<form id="newTaskForm" class="form form--hidden">
+				<input class="form__input" id="form__taskTitle" type="text" placeholder="Название" required>
+				<input class="form__input" id="form__taskProject" type="text" placeholder="Проєкт" required>
+				<input class="form__input" id="form__taskPriority" type="number" placeholder="Приоритет" required>
+				<input class="form__createTime" id="form__createTime" type="number">
+				<textarea class="form__inputs" name="form__description" id="form__description" cols="20" rows="5" required placeholder="Описание задачи"></textarea>
+				<div class="form__navigation">
+					<input id="closeForm" class="form__btn btn" type="reset" value="Закртыть">
+					<input id="submitForm" class="form__btn btn" type="submit" value="Сохранить">
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="lib/jquery.min.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* обнуление стилей */
+body {
+	margin: 0;
+	padding: 0;
+}
+
+ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;	
+}
+
+a {	text-decoration: none; }
+
+p {	margin: 0; }
+
+h1, h2, h3, h4, h5 {
+	margin-top: 0;
+	margin-bottom: 0;
+	font-weight: normal;
+}
+
+* { box-sizing: border-box; }
+
+.disable { display: none; }
+
+
+/* ______________main_________________ */
+.wrapper {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ECF0F1;
+}
+
+.toDoList {
+	width: 350px;
+	min-height: 300px;
+	max-height: 90vh;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	background-color: #D2D7D3;
+}
+
+.title {
+	margin-top: 7px;
+	margin-bottom: 7px;
+	color: #264348;
+}
+
+.tasks {
+	width: 100%;
+	overflow: auto;
+	margin-bottom: 7px;
+}
+
+.task {
+	background: #F5D76E;
+	margin: 5px 10px;
+	padding: 5px 10px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.task--hidden {
+	display: none;
+}
+
+.task__title {
+	flex-basis: 100%;
+	font-size: 20px;
+}
+
+.task__createDate{
+	display: none; 
+}
+
+.task__project {
+	margin-bottom: 5px;
+}
+
+.task__description {
+	flex-basis: 100%;
+	margin-bottom: 5px;
+	display: none;
+}
+
+.task__navigation {
+	flex-basis: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+/*--состояние расскрытого пункта задач--*/
+.task--open .task__description {
+	display: block;
+}
+
+
+.navigation {
+	width: 95%;
+	margin-bottom: 5px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.navigation--hidden {
+	display:none;
+}
+
+.btn {
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+	outline: none;
+	cursor: pointer;
+}
+
+
+/*--форма добавления новой задачи--*/
+.form{
+	padding-top: 5px;
+	margin-bottom: 5px;
+	width: 95%;
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.form--hidden {
+	display: none;
+}
+
+.form__createTime{
+	display: none;
+}
+
+.form__input,
+.form__inputs {
+	width: 100%;
+	border: none;
+	margin-bottom: 5px;
+	padding: 5px 10px;
+	font-size: 12px;
+}
+
+.form__inputs{
+	resize: none;
+}
+
+.form__input:focus,
+.form__inputs:focus {
+	outline-color: #F5D76E;
+}
+
+.form__navigation {
+	width: 100%;
+}
+
+.form__btn {
+	width: 50%;
+	float: right;
+}
