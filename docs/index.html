@@ -12,9 +12,59 @@
 		<div class="toDoList">
 			<h1 class="title">todo:</h1>
 			<section id="tasks" class="tasks">
- 			
- 			<!-- список задач *создаем через форму создания новой задачи  -->
-						
+ 				
+	 			<article class="task">
+	 				<header class="task__title">task1</header> 	
+	 				<div class="task__createDate">1536316664123</div>
+	 				<div class="task__project">Проэкт: <span class="task__projectValue">project-1</span></div>
+	 				<div class="task__priority">priority: <span class="task__priorityValue">1</span></div>
+	 				<div class="task__description">Описание задачи: <span class="task__descriptionValue">описание задачи</span></div>
+	 					<nav class="task__navigation">
+	 						<button class="btn btn__edit">Изменить</button>
+	 						<button class="btn btn__close">Закрыть</button>
+	 						<button class="btn btn__state">Развернуть</button>
+	 					</nav>
+				</article>
+
+				<article class="task">
+	 				<header class="task__title">task2</header> 	
+	 				<div class="task__createDate">1536316664122</div>
+	 				<div class="task__project">Проэкт: <span class="task__projectValue">project-1</span></div>
+	 				<div class="task__priority">priority: <span class="task__priorityValue">2</span></div>
+	 				<div class="task__description">Описание задачи: <span class="task__descriptionValue">описание задачи</span></div>
+	 					<nav class="task__navigation">
+	 						<button class="btn btn__edit">Изменить</button>
+	 						<button class="btn btn__close">Закрыть</button>
+	 						<button class="btn btn__state">Развернуть</button>
+	 					</nav>
+				</article>
+
+				<article class="task">
+	 				<header class="task__title">task3</header> 	
+	 				<div class="task__createDate">1536316664121</div>
+	 				<div class="task__project">Проэкт: <span class="task__projectValue">project-4</span></div>
+	 				<div class="task__priority">priority: <span class="task__priorityValue">1</span></div>
+	 				<div class="task__description">Описание задачи: <span class="task__descriptionValue">описание задачи</span></div>
+	 					<nav class="task__navigation">
+	 						<button class="btn btn__edit">Изменить</button>
+	 						<button class="btn btn__close">Закрыть</button>
+	 						<button class="btn btn__state">Развернуть</button>
+	 					</nav>
+				</article>
+
+				<article class="task">
+	 				<header class="task__title">task4</header> 	
+	 				<div class="task__createDate">1536316664120</div>
+	 				<div class="task__project">Проэкт: <span class="task__projectValue">project-3</span></div>
+	 				<div class="task__priority">priority: <span class="task__priorityValue">7</span></div>
+	 				<div class="task__description">Описание задачи: <span class="task__descriptionValue">описание задачи</span></div>
+	 					<nav class="task__navigation">
+	 						<button class="btn btn__edit">Изменить</button>
+	 						<button class="btn btn__close">Закрыть</button>
+	 						<button class="btn btn__state">Развернуть</button>
+	 					</nav>
+				</article>
+
 			</section>
 			<section class="navigation">
 				<button id="newTaskBtn" class="btn navigation__newTask" onclick="showForm()">Новая задача</button>

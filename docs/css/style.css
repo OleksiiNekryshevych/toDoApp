@@ -32,14 +32,14 @@ h1, h2, h3, h4, h5 {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background-color: #ECF0F1;
+	background-color: #bdc3c7;
 }
 
 .toDoList {
 	width: 350px;
 	min-height: 300px;
-	max-height: 90vh;
-
+	max-height: 90vh;	
+	border-radius: 7px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
@@ -63,6 +63,7 @@ h1, h2, h3, h4, h5 {
 	background: #F5D76E;
 	margin: 5px 10px;
 	padding: 5px 10px;
+	border-radius: 5px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -82,19 +83,27 @@ h1, h2, h3, h4, h5 {
 }
 
 .task__project {
-	margin-bottom: 5px;
+	margin-bottom: 8px;
+}
+
+.task__projectValue {
+	text-decoration: underline;
+	margin-left: 5px;
 }
 
 .task__description {
 	flex-basis: 100%;
-	margin-bottom: 5px;
+	margin-bottom: 8px;
 	display: none;
+	background-color: #f4e2a1;
+	padding: 10px;
 }
 
 .task__navigation {
 	flex-basis: 100%;
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 5px;
 }
 
 /*--состояние расскрытого пункта задач--*/
@@ -102,12 +111,12 @@ h1, h2, h3, h4, h5 {
 	display: block;
 }
 
-
 .navigation {
 	width: 95%;
-	margin-bottom: 5px;
+	margin-bottom: 7px;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .navigation--hidden {
@@ -117,6 +126,10 @@ h1, h2, h3, h4, h5 {
 .btn {
 	font-size: 12px;
 	line-height: 20px;
+	border-radius: 3px;
+	border-width: 0;
+	width: 100px;
+	background-color: #ecf0f1;
 }
 
 .btn:hover,

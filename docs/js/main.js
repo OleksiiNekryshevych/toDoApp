@@ -1,38 +1,35 @@
-
+//updateLS();
+//loadLS();
 
 // 0. форма добавления новой задачи_________________________________________________
 
 //нажатие на кнопку "сохранить"
 $('#submitForm').on('click', function(e){
-		console.log('нажатие кнопки сохранить'); 
 	e.preventDefault();
 	addTask();
-	//hideForm();
 });
 
 //нажатие на кнопу "закрыть"
 $('#closeForm').on('click', function(e){
-		console.log('нажатие кнопки закрыть');
 	hideForm();
 });
 
 //отображение поля заполения новой задачи
 function showForm() {
-		console.log('показать форму заполнения');
 	$('.form').removeClass('form--hidden');
 	$('.navigation').addClass('navigation--hidden');
 };
 
 function hideForm() {
-			console.log('скрытие формы');
 	$('.form').addClass('form--hidden');
 	$('.navigation').removeClass('navigation--hidden');
 	$('#newTaskForm')[0].reset();
 }
 
+
 // 1. функцтя которая создает task _________________________________________________
 function addTask() {
-		console.log('addTask();');	
+					//console.log('addTask();');	
 	var tasks = document.getElementById('tasks');
 	var title =  document.getElementById('form__taskTitle').value;
 	var project = document.getElementById('form__taskProject').value;
@@ -47,7 +44,7 @@ function addTask() {
 	checkDate(document.getElementById('form__createTime').value);
 
 	function checkDate(date){
-			console.log('checkDate();');	
+						//console.log('checkDate();');	
 		var taskList = document.querySelectorAll('.task');
 		for (var i = 0; i < taskList.length; i++) {
 			if(date == taskList[i].querySelector('.task__createDate').innerHTML) return editTask(taskList[i]);
@@ -57,7 +54,7 @@ function addTask() {
 	
 	//функция которая редактирует существующий task
 	function editTask(task) {
-			console.log('editTask();');
+						//console.log('editTask();');
 		task.querySelector('.task__title').innerHTML = title;
 		task.querySelector('.task__projectValue').innerHTML = project;
 		task.querySelector('.task__priorityValue').innerHTML = priority;
@@ -65,11 +62,13 @@ function addTask() {
 
 		hideForm();
 		updateSelector();
+		updateLS();
+		autoSort();
 	}
 
 	//функция которая создает новый таск
 	function createNewTask(){
-			console.log('createNewTask();');
+						//console.log('createNewTask();');
 		var taskNew = document.createElement('article');
 		taskNew.className = 'task';
 		taskNew.innerHTML = '<header class="task__title">' + title + '</header> \
@@ -84,17 +83,18 @@ function addTask() {
 		
 		tasks.appendChild(taskNew);
 		hideForm();
-
-		return updateSelector()
+		updateSelector();
+		updateLS();
+		autoSort();
 	}	
 }
 
 
 // 2. удаление по нажатию на "Закрыть"______________________________________________
 $('.tasks').on('click', '.btn__close', function(e){
-		console.log('нажатие кнопки закрыть');
 	$(this).closest('.task').remove();
 	updateSelector();
+	updateLS();
 });
 
 
@@ -117,7 +117,7 @@ $('.tasks').on('click', '.btn__edit', function(e){
 
 function editForm(task){
 	showForm();
-		console.log('editForm();');
+						//console.log('editForm();');
 	var titleForm =  document.getElementById('form__taskTitle');
 	var projectForm = document.getElementById('form__taskProject');
 	var priorityForm = document.getElementById('form__taskPriority');
@@ -135,23 +135,24 @@ function editForm(task){
 // 5. фильтрация(по времени создания или по приоритету)_________________________________
 
 // Автоматическая сортировка по времени создания при загрузке страницы
-filterData();
-
-$('.navigation').on('click', '#filterPriority__check', function(e){	
+autoSort();
+function autoSort(){	
 	if($('#filterPriority__check').prop("checked")) {
 		filterPriority();
 	} else {
 		filterData();
-	}			
+	}				
+}
+
+$('.navigation').on('click', '#filterPriority__check', function(e){	
+	autoSort();			
 });
 
 function filterData(){
-
-		console.log('фильтрация по дате filterData();');
-
+						//console.log('фильтрация по дате filterData();');
 		var taskList = document.querySelectorAll('.task');
 		var dataArr = [];
-		var tasks = taskList[0].parentNode;
+		var tasks = document.getElementById('tasks');
 
 		for(var i = 0; i < taskList.length; i++) {
 			dataArr.push(tasks.removeChild(taskList[i]));
@@ -168,13 +169,11 @@ function filterData(){
 		});
 }
 
-function filterPriority(){
-		
-		console.log('фильтрация по приоритету');
-	
+function filterPriority(){		
+						//console.log('фильтрация по приоритету filterPriority()');	
 	var taskList = document.querySelectorAll('.task');
 	var priorityArr = [];
-	var tasks = taskList[0].parentNode;
+	var tasks = document.getElementById('tasks');
 
 	for(var i = 0; i < taskList.length; i++) {
 		priorityArr.push(tasks.removeChild(taskList[i]));
@@ -201,9 +200,7 @@ $('.filterProjects').change(function(e){
 });
 
 function filterSelect(project){
-
-		console.log('фильтрация по селектору: ' + project);
-
+						//console.log('фильтрация по селектору: filterSelect(' + project + ');');
 	var taskList = document.querySelectorAll('.task');
 
 	for (var i = 0; i < taskList.length; i++){
@@ -220,10 +217,9 @@ function filterSelect(project){
 }
 
 // 6.2 отслеживание существующих проэктов и добавление в список селект
-function updateSelector(){
-		
-		console.log('обновление селектора');
-
+updateSelector(); //синхронизация селекторов при загрузке страницы
+function updateSelector(){		
+						//console.log('обновление селектора updateSelector()');
 	var filterProjects = document.querySelector('.filterProjects');
 	var selectorList = document.querySelectorAll('.selector');
 	var taskList = document.querySelectorAll('.task');
@@ -239,7 +235,7 @@ function updateSelector(){
 		}
 		if (!important) {
 			filterProjects.removeChild(selectorList[i]);				
-			console.log('удален селектор ' + selectorList[i].innerHTML);
+							//console.log('удален селектор ' + selectorList[i].innerHTML);
 		}
 	}
 
@@ -258,21 +254,18 @@ function updateSelector(){
 			newSelector.className = 'selector';
 			newSelector.innerHTML = taskList[i].querySelector('.task__projectValue').innerHTML;
 			filterProjects.appendChild(newSelector);
-			console.log('добавлен селектор' + taskList[i].querySelector('.task__projectValue').innerHTML);
+							//console.log('добавлен селектор' + taskList[i].querySelector('.task__projectValue').innerHTML);
 			var selectorList = document.querySelectorAll('.selector'); // обновляем список селекторов
 		}
 	}
 }
 
-//синхронизация селекторов при загрузке страницы
-updateSelector();
-
 
 // 7. работа с LocalStorage__________________________________________________________________
 
-//обновление вызывается после выполнения функции 6.2 updateSelector();
-function updateLS() {
-	localStorage.clear();
+// 7.1 обновление БД в localStorage;
+function updateLS() {	
+	localStorage.clear(); //перед записью БД очищаем старую
 
 	var tasks = document.querySelectorAll('.task');
 	var obj = [];
@@ -287,15 +280,36 @@ function updateLS() {
 		}
 		localStorage.setItem('task' + obj[i].date, obj[i].title + ';' + obj[i].date + ';' + obj[i].project + ';' + obj[i].priority + ';' + obj[i].description);
 	}
+	
+	return console.log('база даных обновлена');
 }
 
-
-//загрузка из localStorage
-//loadLS();
+// 7.2 загрузка из localStorage
+loadLS();
 function loadLS() {
+	/* 
+	- проверка, есть ли в LS записи
+	- если БД содержит данные, выгружаем их из памяти,
+	- иначе обновляем базу данных записывая уже созданые в списке задачи (которые созданы в HTML);
+	*/
+	if (localStorage.length) {
+		var storageLength = localStorage.length;
+	} else { 
+		console.log('LS is empty');//в случае если LS пуст
+		return updateLS();
+	} 
+
+	var cleanCurrentTasks = function(){
+		var taskList = document.getElementById('tasks');
+		var tasks = document.querySelectorAll('.task');
+		for(var i = 0; i < tasks.length; i++) {
+			taskList.removeChild(tasks[i]);
+			//console.log('удалена задача' + tasks[i].querySelector('.task__title').innerHTML);
+		}
+	}();
+
 	var newObj = [];
 	var keys = [];
-	var storageLength = localStorage.length;
 	
 	for (var i = 0; i < storageLength; i++) {
 		keys[i] = localStorage.key(i);
@@ -329,8 +343,10 @@ function loadLS() {
 								<button class="btn btn__state">Развернуть</button></nav>';
 			
 			tasks.appendChild(taskNew);
+
+			//console.log('добавлена задача ' + currentTask[0] + '  номер ' + currentTask[1]);
 		}
 
 		return updateSelector()
-	}();
+	}();	
 }
