@@ -1,34 +1,38 @@
-//загрузка из localStorage
-loadLS();
+
 
 // 0. форма добавления новой задачи_________________________________________________
 
 //нажатие на кнопку "сохранить"
-$('#submitForm').on('click', function(e){ 
+$('#submitForm').on('click', function(e){
+		console.log('нажатие кнопки сохранить'); 
 	e.preventDefault();
 	addTask();
-	hideForm();
+	//hideForm();
 });
 
 //нажатие на кнопу "закрыть"
 $('#closeForm').on('click', function(e){
+		console.log('нажатие кнопки закрыть');
 	hideForm();
 });
 
 //отображение поля заполения новой задачи
-function showForm() {	
+function showForm() {
+		console.log('показать форму заполнения');
 	$('.form').removeClass('form--hidden');
 	$('.navigation').addClass('navigation--hidden');
 };
 
 function hideForm() {
+			console.log('скрытие формы');
 	$('.form').addClass('form--hidden');
 	$('.navigation').removeClass('navigation--hidden');
 	$('#newTaskForm')[0].reset();
 }
 
 // 1. функцтя которая создает task _________________________________________________
-function addTask() {	
+function addTask() {
+		console.log('addTask();');	
 	var tasks = document.getElementById('tasks');
 	var title =  document.getElementById('form__taskTitle').value;
 	var project = document.getElementById('form__taskProject').value;
@@ -43,27 +47,29 @@ function addTask() {
 	checkDate(document.getElementById('form__createTime').value);
 
 	function checkDate(date){
+			console.log('checkDate();');	
 		var taskList = document.querySelectorAll('.task');
 		for (var i = 0; i < taskList.length; i++) {
 			if(date == taskList[i].querySelector('.task__createDate').innerHTML) return editTask(taskList[i]);
 		}
 		return createNewTask();
-	};
+	}
 	
 	//функция которая редактирует существующий task
 	function editTask(task) {
+			console.log('editTask();');
 		task.querySelector('.task__title').innerHTML = title;
 		task.querySelector('.task__projectValue').innerHTML = project;
 		task.querySelector('.task__priorityValue').innerHTML = priority;
 		task.querySelector('.task__descriptionValue').innerHTML = description;
 
 		hideForm();
-
-		return updateSelector()
+		updateSelector();
 	}
 
 	//функция которая создает новый таск
 	function createNewTask(){
+			console.log('createNewTask();');
 		var taskNew = document.createElement('article');
 		taskNew.className = 'task';
 		taskNew.innerHTML = '<header class="task__title">' + title + '</header> \
@@ -86,6 +92,7 @@ function addTask() {
 
 // 2. удаление по нажатию на "Закрыть"______________________________________________
 $('.tasks').on('click', '.btn__close', function(e){
+		console.log('нажатие кнопки закрыть');
 	$(this).closest('.task').remove();
 	updateSelector();
 });
@@ -110,7 +117,7 @@ $('.tasks').on('click', '.btn__edit', function(e){
 
 function editForm(task){
 	showForm();
-
+		console.log('editForm();');
 	var titleForm =  document.getElementById('form__taskTitle');
 	var projectForm = document.getElementById('form__taskProject');
 	var priorityForm = document.getElementById('form__taskPriority');
@@ -139,7 +146,9 @@ $('.navigation').on('click', '#filterPriority__check', function(e){
 });
 
 function filterData(){
-	return function() {
+
+		console.log('фильтрация по дате filterData();');
+
 		var taskList = document.querySelectorAll('.task');
 		var dataArr = [];
 		var tasks = taskList[0].parentNode;
@@ -157,29 +166,29 @@ function filterData(){
 		dataArr.forEach(function(node){
 			tasks.appendChild(node);
 		});
-	}();
 }
 
 function filterPriority(){
-	return function() {
-		var taskList = document.querySelectorAll('.task');
-		var priorityArr = [];
-		var tasks = taskList[0].parentNode;
+		
+		console.log('фильтрация по приоритету');
+	
+	var taskList = document.querySelectorAll('.task');
+	var priorityArr = [];
+	var tasks = taskList[0].parentNode;
 
-		for(var i = 0; i < taskList.length; i++) {
-			priorityArr.push(tasks.removeChild(taskList[i]));
-		}
+	for(var i = 0; i < taskList.length; i++) {
+		priorityArr.push(tasks.removeChild(taskList[i]));
+	}
 
-		priorityArr.sort(function(nodeA, nodeB) {
-			var priorityA = nodeA.querySelector('.task__priorityValue').innerHTML;
-			var priorityB = nodeB.querySelector('.task__priorityValue').innerHTML;
-			return priorityA - priorityB;
-		});
+	priorityArr.sort(function(nodeA, nodeB) {
+		var priorityA = nodeA.querySelector('.task__priorityValue').innerHTML;
+		var priorityB = nodeB.querySelector('.task__priorityValue').innerHTML;
+		return priorityA - priorityB;
+	});
 
-		priorityArr.forEach(function(node){
-			tasks.appendChild(node);
-		});
-	}();
+	priorityArr.forEach(function(node){
+		tasks.appendChild(node);
+	});
 }
 
 
@@ -192,64 +201,67 @@ $('.filterProjects').change(function(e){
 });
 
 function filterSelect(project){
-	return function() {
-		var taskList = document.querySelectorAll('.task');
 
-		for (var i = 0; i < taskList.length; i++){
-			var taskProject = taskList[i].querySelector('.task__projectValue').innerHTML;
-			
-			if (project == 'All') {
-				taskList[i].classList.remove('task--hidden');
-			} else if(taskProject == project) {
-				taskList[i].classList.remove('task--hidden');
-			} else {
-				taskList[i].classList.add('task--hidden');
-			}
+		console.log('фильтрация по селектору: ' + project);
+
+	var taskList = document.querySelectorAll('.task');
+
+	for (var i = 0; i < taskList.length; i++){
+		var taskProject = taskList[i].querySelector('.task__projectValue').innerHTML;
+		
+		if (project == 'All') {
+			taskList[i].classList.remove('task--hidden');
+		} else if(taskProject == project) {
+			taskList[i].classList.remove('task--hidden');
+		} else {
+			taskList[i].classList.add('task--hidden');
 		}
-	}();
+	}
 }
 
 // 6.2 отслеживание существующих проэктов и добавление в список селект
 function updateSelector(){
-	return function() {
-		var filterProjects = document.querySelector('.filterProjects');
-		var selectorList = document.querySelectorAll('.selector');
-		var taskList = document.querySelectorAll('.task');
+		
+		console.log('обновление селектора');
 
-		//удаление ненужного селектора задач для которого нету
-		for (var i = 1; i < selectorList.length; i++) {
-			var important = false;		
+	var filterProjects = document.querySelector('.filterProjects');
+	var selectorList = document.querySelectorAll('.selector');
+	var taskList = document.querySelectorAll('.task');
 
-			for (var j = 0; j < taskList.length; j++) {
-				if (selectorList[i].innerHTML == taskList[j].querySelector('.task__projectValue').innerHTML) {
-					important = true;
-				}
+	//удаление ненужного селектора задач для которого нету
+	for (var i = 1; i < selectorList.length; i++) {
+		var important = false;		
+
+		for (var j = 0; j < taskList.length; j++) {
+			if (selectorList[i].innerHTML == taskList[j].querySelector('.task__projectValue').innerHTML) {
+				important = true;
 			}
-			if (!important) {
-				filterProjects.removeChild(selectorList[i]);
+		}
+		if (!important) {
+			filterProjects.removeChild(selectorList[i]);				
+			console.log('удален селектор ' + selectorList[i].innerHTML);
+		}
+	}
+
+	//добавление селектора в список.
+	for (var i = 0; i < taskList.length; i++) {
+		var isSelectorNeed = true;
+
+		for (var j = 1; j < selectorList.length; j++) {
+			if (selectorList[j].innerHTML == taskList[i].querySelector('.task__projectValue').innerHTML) {
+				isSelectorNeed = false;
 			}
 		}
 
-		//добавление селектора в список.
-		for (var i = 0; i < taskList.length; i++) {
-			var isSelectorNeed = true;
-
-			for (var j = 1; j < selectorList.length; j++) {
-				if (selectorList[j].innerHTML == taskList[i].querySelector('.task__projectValue').innerHTML) {
-					isSelectorNeed = false;
-				}
-			}
-
-			if (isSelectorNeed) {			
-				var newSelector = document.createElement('option');
-				newSelector.className = 'selector';
-				newSelector.innerHTML = taskList[i].querySelector('.task__projectValue').innerHTML;
-				filterProjects.appendChild(newSelector);
-			}
+		if (isSelectorNeed) {			
+			var newSelector = document.createElement('option');
+			newSelector.className = 'selector';
+			newSelector.innerHTML = taskList[i].querySelector('.task__projectValue').innerHTML;
+			filterProjects.appendChild(newSelector);
+			console.log('добавлен селектор' + taskList[i].querySelector('.task__projectValue').innerHTML);
+			var selectorList = document.querySelectorAll('.selector'); // обновляем список селекторов
 		}
-
-		updateLS(); // после всех изменений обновляем локальное хранилище
-	}();
+	}
 }
 
 //синхронизация селекторов при загрузке страницы
@@ -277,6 +289,9 @@ function updateLS() {
 	}
 }
 
+
+//загрузка из localStorage
+//loadLS();
 function loadLS() {
 	var newObj = [];
 	var keys = [];
