@@ -1,12 +1,9 @@
-//updateLS();
-//loadLS();
-
-// 0. форма добавления новой задачи_________________________________________________
+// 0. форма редактирования задачи_____________________________________________________
 
 //нажатие на кнопку "сохранить"
 $('#submitForm').on('click', function(e){
 	e.preventDefault();
-	addTask();
+	readForm();
 });
 
 //нажатие на кнопу "закрыть"
@@ -27,70 +24,67 @@ function hideForm() {
 }
 
 
-// 1. функцтя которая создает task _________________________________________________
-function addTask() {
-					//console.log('addTask();');	
-	var tasks = document.getElementById('tasks');
+// 1 функцтя которая создает task _________________________________________________
+
+// 1.1 сбор данных из заполненой формы
+function readForm() {
+					console.log('readForm();');	
 	var title =  document.getElementById('form__taskTitle').value;
 	var project = document.getElementById('form__taskProject').value;
 	var priority = document.getElementById('form__taskPriority').value;
 	var description = document.getElementById('form__description').value;
 	var newTime =  Date.now();
 
-	// валидация формы.
-	if(title == '' || project == '' || priority == '' || description == '') return alert('не все поля заполнены');
+	// валидация формы
+	if(!validationForm(title, project, priority, description)) return
 
-	//функция которая проверяет менять существующую заметку или создать новуюа
+	// функция которая проверяет менять существующую заметку или создать новуюа
 	checkDate(document.getElementById('form__createTime').value);
 
 	function checkDate(date){
-						//console.log('checkDate();');	
+						console.log('checkDate();');	
 		var taskList = document.querySelectorAll('.task');
 		for (var i = 0; i < taskList.length; i++) {
-			if(date == taskList[i].querySelector('.task__createDate').innerHTML) return editTask(taskList[i]);
+			if(date == taskList[i].querySelector('.task__createDate').innerHTML) return editTask(taskList[i], title, project, priority, description);
 		}
-		return createNewTask();
-	}
-	
-	//функция которая редактирует существующий task
-	function editTask(task) {
-						//console.log('editTask();');
-		task.querySelector('.task__title').innerHTML = title;
-		task.querySelector('.task__projectValue').innerHTML = project;
-		task.querySelector('.task__priorityValue').innerHTML = priority;
-		task.querySelector('.task__descriptionValue').innerHTML = description;
-
-		hideForm();
-		updateSelector();
-		updateLS();
-		autoSort();
+		return pasteTask(title, newTime, project, priority, description);
 	}
 
-	//функция которая создает новый таск
-	function createNewTask(){
-						//console.log('createNewTask();');
-		var taskNew = document.createElement('article');
-		taskNew.className = 'task';
-		taskNew.innerHTML = '<header class="task__title">' + title + '</header> \
-							<div class="task__createDate">' + newTime + '</div>\
+	hideForm();
+	updateSelector();
+	updateLS();
+	autoSort();	
+}
+
+// 1.2 функция которая редактирует существующий task
+function editTask(task, title, project, priority, description) {
+					console.log('editTask();');
+	task.querySelector('.task__title').innerHTML = title;
+	task.querySelector('.task__projectValue').innerHTML = project;
+	task.querySelector('.task__priorityValue').innerHTML = priority;
+	task.querySelector('.task__descriptionValue').innerHTML = description;
+}
+
+// 1.3 вставить task на страницу
+function pasteTask(title, time, project, priority, description) {
+					console.log('pasteTask()');
+	var tasks = document.getElementById('tasks');
+	var newTask = document.createElement('article');
+	newTask.className = 'task';
+	newTask.innerHTML = '<header class="task__title">' + title + '</header> \
+							<div class="task__createDate">' + time + '</div>\
 							<div class="task__project">Проэкт: <span class="task__projectValue">' + project + '</span></div>\
 							<div class="task__priority">priority: <span class="task__priorityValue">' + priority + '</span></div>\
-							<div class="task__description">Описание задачи: <span class="task__descriptionValue">' + description + '</span></div>\
+							<div class="task__description"><span class="task__descriptionValue">' + description + '</span></div>\
 							<nav class="task__navigation">\
 							<button class="btn btn__edit">Изменить</button>\
 							<button class="btn btn__close">Закрыть</button>\
 							<button class="btn btn__state">Развернуть</button></nav>';
-		
-		tasks.appendChild(taskNew);
-		hideForm();
-		updateSelector();
-		updateLS();
-		autoSort();
-	}	
+	tasks.appendChild(newTask);
 }
 
 
-// 2. удаление по нажатию на "Закрыть"______________________________________________
+// 2 удаление по нажатию на "Закрыть"______________________________________________
 $('.tasks').on('click', '.btn__close', function(e){
 	$(this).closest('.task').remove();
 	updateSelector();
@@ -109,15 +103,15 @@ $('.tasks').on('click', '.btn__state', function(e){
 });
 
 
-// 4. редактирование task-а_________________________________________________________
-// по нажатию происходит перенос даных из таска в форму редактирования далее передается в ф-ю addTask();
+// 4 редактирование таска - заполнение формы из существующего таска________________________
+// по нажатию происходит перенос даных из таска в форму редактирования далее передается в ф-ю readForm();
 $('.tasks').on('click', '.btn__edit', function(e){
 	editForm(this.closest('.task'));
 });
 
 function editForm(task){
 	showForm();
-						//console.log('editForm();');
+						console.log('editForm();');
 	var titleForm =  document.getElementById('form__taskTitle');
 	var projectForm = document.getElementById('form__taskProject');
 	var priorityForm = document.getElementById('form__taskPriority');
@@ -132,10 +126,8 @@ function editForm(task){
 }
 
 
-// 5. фильтрация(по времени создания или по приоритету)_________________________________
+// 5 фильтрация(по времени создания или по приоритету)_________________________________
 
-// Автоматическая сортировка по времени создания при загрузке страницы
-autoSort();
 function autoSort(){	
 	if($('#filterPriority__check').prop("checked")) {
 		filterPriority();
@@ -148,8 +140,9 @@ $('.navigation').on('click', '#filterPriority__check', function(e){
 	autoSort();			
 });
 
+// 5.1 фильтрация по дате создания
 function filterData(){
-						//console.log('фильтрация по дате filterData();');
+						console.log('фильтрация по дате filterData();');
 		var taskList = document.querySelectorAll('.task');
 		var dataArr = [];
 		var tasks = document.getElementById('tasks');
@@ -169,8 +162,9 @@ function filterData(){
 		});
 }
 
+// 5.2 фильтрация по приоритету
 function filterPriority(){		
-						//console.log('фильтрация по приоритету filterPriority()');	
+						console.log('фильтрация по приоритету filterPriority()');	
 	var taskList = document.querySelectorAll('.task');
 	var priorityArr = [];
 	var tasks = document.getElementById('tasks');
@@ -191,16 +185,29 @@ function filterPriority(){
 }
 
 
-// 6. селектор по проэкту___________________________________________________________
+// 6 селектор по проэкту___________________________________________________________
 
-// 6.1 изменение селектора проэкта
+// 6.1 изменение селектора проэкта по нажатию на селектор
 $('.filterProjects').change(function(e){
 	var project = $('option:selected').val();
 	filterSelect(project);
 });
 
+$('.tasks').on('click', '.task__projectValue', function(){	
+	//фильтрация по нажатию на название проэкта на карточке задания
+	filterSelect(this.innerHTML);
+
+	//изменение селектора после применения фильтрации
+	var selectorList = document.querySelectorAll('.selector');
+	for(var i = 0; i < selectorList.length; i++) {
+		if (selectorList[i].innerHTML == this.innerHTML) {
+			selectorList[i].selected = true;	
+		}
+	}	
+})
+
 function filterSelect(project){
-						//console.log('фильтрация по селектору: filterSelect(' + project + ');');
+						console.log('фильтрация по селектору: filterSelect(' + project + ');');
 	var taskList = document.querySelectorAll('.task');
 
 	for (var i = 0; i < taskList.length; i++){
@@ -217,9 +224,8 @@ function filterSelect(project){
 }
 
 // 6.2 отслеживание существующих проэктов и добавление в список селект
-updateSelector(); //синхронизация селекторов при загрузке страницы
 function updateSelector(){		
-						//console.log('обновление селектора updateSelector()');
+						console.log('|обновление селектора updateSelector()');
 	var filterProjects = document.querySelector('.filterProjects');
 	var selectorList = document.querySelectorAll('.selector');
 	var taskList = document.querySelectorAll('.task');
@@ -235,7 +241,7 @@ function updateSelector(){
 		}
 		if (!important) {
 			filterProjects.removeChild(selectorList[i]);				
-							//console.log('удален селектор ' + selectorList[i].innerHTML);
+							console.log('удален селектор ' + selectorList[i].innerHTML);
 		}
 	}
 
@@ -254,14 +260,14 @@ function updateSelector(){
 			newSelector.className = 'selector';
 			newSelector.innerHTML = taskList[i].querySelector('.task__projectValue').innerHTML;
 			filterProjects.appendChild(newSelector);
-							//console.log('добавлен селектор' + taskList[i].querySelector('.task__projectValue').innerHTML);
+							console.log('\\__добавлен селектор: ' + taskList[i].querySelector('.task__projectValue').innerHTML);
 			var selectorList = document.querySelectorAll('.selector'); // обновляем список селекторов
 		}
 	}
 }
 
 
-// 7. работа с LocalStorage__________________________________________________________________
+// 7 работа с LocalStorage__________________________________________________________________
 
 // 7.1 обновление БД в localStorage;
 function updateLS() {	
@@ -287,27 +293,16 @@ function updateLS() {
 // 7.2 загрузка из localStorage
 loadLS();
 function loadLS() {
-	/* 
-	- проверка, есть ли в LS записи
-	- если БД содержит данные, выгружаем их из памяти,
-	- иначе обновляем базу данных записывая уже созданые в списке задачи (которые созданы в HTML);
-	*/
-	if (localStorage.length) {
-		var storageLength = localStorage.length;
-	} else { 
-		console.log('LS is empty');//в случае если LS пуст
-		return updateLS();
-	} 
-
 	var cleanCurrentTasks = function(){
 		var taskList = document.getElementById('tasks');
 		var tasks = document.querySelectorAll('.task');
 		for(var i = 0; i < tasks.length; i++) {
 			taskList.removeChild(tasks[i]);
-			//console.log('удалена задача' + tasks[i].querySelector('.task__title').innerHTML);
+			console.log('удалена задача' + tasks[i].querySelector('.task__title').innerHTML);
 		}
 	}();
 
+	var storageLength = localStorage.length;
 	var newObj = [];
 	var keys = [];
 	
@@ -329,24 +324,28 @@ function loadLS() {
 	return function() {
 		var tasks = document.getElementById('tasks');
 		for (var i = 0; i < obj.length; i++) {
-			currentTask = obj[i];
-			var taskNew = document.createElement('article');
-			taskNew.className = 'task';
-			taskNew.innerHTML = '<header class="task__title">' + currentTask[0] + '</header> \
-								<div class="task__createDate">' + currentTask[1] + '</div>\
-								<div class="task__project">Проэкт: <span class="task__projectValue">' + currentTask[2] + '</span></div>\
-								<div class="task__priority">priority: <span class="task__priorityValue">' + currentTask[3] + '</span></div>\
-								<div class="task__description">Описание задачи: <span class="task__descriptionValue">' + currentTask[4] + '</span></div>\
-								<nav class="task__navigation">\
-								<button class="btn btn__edit">Изменить</button>\
-								<button class="btn btn__close">Закрыть</button>\
-								<button class="btn btn__state">Развернуть</button></nav>';
-			
-			tasks.appendChild(taskNew);
-
-			//console.log('добавлена задача ' + currentTask[0] + '  номер ' + currentTask[1]);
+			currentTask = obj[i];			
+			pasteTask(currentTask[0], currentTask[1], currentTask[2], currentTask[3], currentTask[4]);
 		}
 
+		// Автоматическая сортировка по времени создания при загрузке страницы
+		autoSort();
 		return updateSelector()
 	}();	
 }
+
+
+//8 валидация формы__________________________________________________________________
+function validationForm(title, project, priority, description) {
+	if (!title) document.getElementById('form__taskTitle').classList.add('form__input--error');
+	if (!project) document.getElementById('form__taskProject').classList.add('form__input--error');
+	if (!priority) document.getElementById('form__taskPriority').classList.add('form__input--error');
+	if (!description) document.getElementById('form__description').classList.add('form__input--error');
+
+	if(title == '' || project == '' || priority == '' || description == '') return false;
+	else return true;
+}
+
+$('input, textarea').on('focus', function(e){
+	this.classList.remove('form__input--error');
+});

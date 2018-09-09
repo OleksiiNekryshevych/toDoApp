@@ -37,7 +37,6 @@ h1, h2, h3, h4, h5 {
 
 .toDoList {
 	width: 350px;
-	min-height: 300px;
 	max-height: 90vh;	
 	border-radius: 7px;
 	display: flex;
@@ -87,8 +86,12 @@ h1, h2, h3, h4, h5 {
 }
 
 .task__projectValue {
-	text-decoration: underline;
 	margin-left: 5px;
+	cursor: pointer;
+}
+
+.task__projectValue:hover {
+	text-decoration: underline;
 }
 
 .task__description {
@@ -162,6 +165,7 @@ h1, h2, h3, h4, h5 {
 .form__inputs {
 	width: 100%;
 	border: none;
+	border-radius: 5px;
 	margin-bottom: 5px;
 	padding: 5px 10px;
 	font-size: 12px;
@@ -173,14 +177,23 @@ h1, h2, h3, h4, h5 {
 
 .form__input:focus,
 .form__inputs:focus {
-	outline-color: #F5D76E;
+	outline: none;
+	box-shadow: 0 0 5px 2px #F5D76E;
+}
+
+.form__input--error {
+	background-color: #ffc9c9;
+	position: relative;
 }
 
 .form__navigation {
 	width: 100%;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
 }
 
 .form__btn {
-	width: 50%;
-	float: right;
+	width: 49%;
 }
+
